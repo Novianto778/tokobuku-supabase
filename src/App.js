@@ -1,9 +1,12 @@
+import DashboardLayout from "layout/DashboardLayout";
 import Router from "./constants/routes";
 
 function App() {
   return (
     <>
-      <Router />
+      <DashboardLayout>
+        <Router />
+      </DashboardLayout>
     </>
   );
 }

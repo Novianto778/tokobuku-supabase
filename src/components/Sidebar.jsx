@@ -47,33 +47,32 @@ const Sidebar = () => {
       <ul className="pt-6">
         {links.map((link, index) => {
           return (
-            <>
+            <div key={index}>
               <h4
                 className={`text-white font-semibold mt-6 px-2 text-lg ${
                   !open && "hidden"
-                } origin-left delay-500 duration-200`}
-                key={index}
+                } origin-left duration-200`}
               >
                 {link.title}
               </h4>
-              {link.links.map((item, index) => (
+              {link.links.map((item, idx) => (
                 <NavLink
                   style={activeStylesClass}
                   to={item.link}
-                  key={index}
-                  className={`text-gray-300 text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md mt-2`}
+                  key={idx}
+                  className={`text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md ${
+                    !open ? "mt-4" : "mt-2"
+                  }`}
                 >
-                  <span className={`${!open && "mt-4"}`}>{item.icon}</span>
+                  <span>{item.icon}</span>
                   <span
-                    className={`${
-                      !open && "hidden"
-                    } origin-left delay-500 duration-200`}
+                    className={`${!open && "hidden"} origin-left duration-200`}
                   >
                     {item.name}
                   </span>
                 </NavLink>
               ))}
-            </>
+            </div>
           );
         })}
       </ul>

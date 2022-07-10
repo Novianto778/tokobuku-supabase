@@ -1,5 +1,6 @@
 import { MdDashboard } from "react-icons/md";
-import { AiOutlineBook } from "react-icons/ai";
+import { AiOutlineBook, AiOutlineShoppingCart } from "react-icons/ai";
+import {GiProgression} from "react-icons/gi";
 
 export const links = [
   {
@@ -21,14 +22,14 @@ export const links = [
     title: "Transaksi",
     links: [
       {
-        name: "Dashboard",
-        icon: <MdDashboard className="w-6 h-6" />,
-        link: "/book",
+        name: "Sales",
+        icon: <GiProgression className="w-6 h-6" />,
+        link: "/sales",
       },
       {
-        name: "Data Buku",
-        icon: <AiOutlineBook className="w-6 h-6" />,
-        link: "/book",
+        name: "Purchases",
+        icon: <AiOutlineShoppingCart className="w-6 h-6" />,
+        link: "/purchases",
       },
     ],
   },
