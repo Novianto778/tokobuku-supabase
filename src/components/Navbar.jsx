@@ -1,46 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
-import { FiSearch } from "react-icons/fi";
 import { RiNotification3Line } from "react-icons/ri";
 import { BsChatLeft } from "react-icons/bs";
 import { MdKeyboardArrowDown } from "react-icons/md";
-import { IoIosClose } from "react-icons/io";
 import avatar from "../assets/img/avatar.png";
+import SearchBar from "./SearchBar";
 
 const Navbar = () => {
-  const [isSearch, setIsSearch] = useState(false);
-  const searchInputRef = useRef(null);
-  const handleSearchBar = () => {
-    setIsSearch(true);
-  };
-
-  useEffect(() => {
-    if (isSearch) searchInputRef.current.focus();
-  }, [isSearch]);
   return (
-    <nav className="flex flex-1 items-center justify-between">
-      <div
-        className={`flex items-center p-2 border-primary border-2 duration-200 rounded-full ${
-          isSearch ? "w-48" : "w-10"
-        }`}
-      >
-        <FiSearch className="w-5 h-5" onClick={handleSearchBar} />
-        <input
-          ref={searchInputRef}
-          placeholder="Search"
-          className={`${
-            !isSearch && "hidden"
-          } origin-left duration-200 text-sm w-full outline-none pl-4`}
-        />
-
-        <span
-          className={`${
-            !isSearch && "hidden"
-          } origin-left duration-200 ml-auto`}
-          onClick={() => setIsSearch(false)}
-        >
-          <IoIosClose />
-        </span>
-      </div>
+    <nav className="flex flex-1 items-center justify-between px-7 py-2 border-b-2">
+      <SearchBar />
       <div className="flex items-center">
         <button className="relative text-xl rounded-full p-3 hover:bg-light-gray">
           <BsChatLeft className="w-5 h-5" />

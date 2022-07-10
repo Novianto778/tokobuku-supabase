@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiChevronLeft } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import Logo from "../assets/img/logo.svg";
 import { links } from "../constants/links";
 const Sidebar = () => {
-  const [open, setOpen] = useState(true);
+  const localData = JSON.parse(localStorage.getItem("sidebarOpen")) || true;
+  const [open, setOpen] = useState(localData);
   const activeStylesClass = ({ isActive }) => {
     return {
       backgroundColor: isActive ? "white" : "transparent",
@@ -12,6 +13,12 @@ const Sidebar = () => {
       fontWeight: isActive ? "bold" : "normal",
     };
   };
+
+  useEffect(() => {
+    const localState = JSON.parse(localStorage.getItem("sidebarOpen"));
+    setOpen(localState);
+  }, [open]);
+
   return (
     <div
       className={`${
@@ -20,7 +27,10 @@ const Sidebar = () => {
     >
       <div
         className="absolute cursor-pointer rounded-full -right-3 top-9 w-6 h-6 border-2 border-white bg-white"
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          setOpen(!open);
+          localStorage.setItem("sidebarOpen", !open);
+        }}
       >
         <FiChevronLeft
           size={20}

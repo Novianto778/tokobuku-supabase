@@ -1,18 +1,27 @@
 import { Navigate, useRoutes } from "react-router-dom";
 import Dashboard from "pages/Dashboard";
+import DashboardLayout from "layout/DashboardLayout";
+import Book from "pages/Book";
 
 export default function Router() {
   return useRoutes([
-    { path: "/dashboard", element: <Dashboard /> },
+    {
+      path: "/dashboard",
+      element: <DashboardLayout />,
+      children: [
+        { path: "app", element: <Dashboard /> },
+        { path: "book", element: <Book /> },
+      ],
+    },
     // {
     //   path: '/dashboard',
     //   element: <DashboardLayout />,
-    //   children: [
-    //     { path: 'app', element: <DashboardApp /> },
-    //     { path: 'user', element: <User /> },
-    //     { path: 'products', element: <Products /> },
-    //     { path: 'blog', element: <Blog /> },
-    //   ],
+    // children: [
+    //   { path: 'app', element: <DashboardApp /> },
+    //   { path: 'user', element: <User /> },
+    //   { path: 'products', element: <Products /> },
+    //   { path: 'blog', element: <Blog /> },
+    // ],
     // },
     // {
     //   path: '/',

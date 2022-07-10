@@ -9,12 +9,12 @@ export const links = [
       {
         name: "Home",
         icon: <MdDashboard className="w-6 h-6" />,
-        link: "/dashboard",
+        link: "/dashboard/app",
       },
       {
         name: "Data Buku",
         icon: <AiOutlineBook className="w-6 h-6" />,
-        link: "/book",
+        link: "/dashboard/book",
       },
     ],
   },

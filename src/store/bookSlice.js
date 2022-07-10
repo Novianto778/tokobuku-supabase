@@ -11,6 +11,14 @@ export const fetchBook = createAsyncThunk("book/fetchBook", async () => {
   return {book, error};
 });
 
+export const deleteBookById = createAsyncThunk("book/deleteBookById", async (id) => {
+  const { data, error } = await supabase
+  .from('book_category')
+  .delete()
+  .eq('id', id)
+  console.log(data)
+})
+
 export const bookSlice = createSlice({
   name: "book",
   initialState: {

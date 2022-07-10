@@ -1,14 +1,16 @@
 import Navbar from "components/Navbar";
 import Sidebar from "components/Sidebar";
-import React from "react";
+import { Outlet } from "react-router-dom";
 
-const DashboardLayout = ({ children }) => {
+const DashboardLayout = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="px-7 pt-4 text-2xl font-semibold flex-1 h-screen">
+      <div className="flex-1 h-screen">
         <Navbar />
-        {children}
+        <div className="mt-2 px-7 pt-4 ">
+          <Outlet />
+        </div>
       </div>
     </div>
   );
