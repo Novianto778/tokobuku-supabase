@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { GrView } from "react-icons/gr";
 import { FiTrash } from "react-icons/fi";
 import { supabase } from "services/supabaseClient";
+import { useDispatch } from "react-redux";
+import { openModal } from "store/modalSlice";
 
 const deleteBook = async (id) => {
   const { data, error } = await supabase.from("book").delete().eq("id", id);
@@ -56,31 +58,36 @@ export const book_columns = [
     sortable: false,
     align: "right",
     renderCell: (params) => {
-      return (
-        <div className="cellAction flex flex-wrap gap-x-4">
-          <Link
-            to="/users/test"
-            style={{ textDecoration: "none" }}
-            className="group duration-200"
-          >
-            <div className="px-4 py-1 bg-white border-[1.5px] border-black rounded-md flex items-center">
-              <span className="mr-4 group-hover:scale-110 text-white">
-                <GrView />
-              </span>
-              <span className="group-hover:font-semibold">View</span>
-            </div>
-          </Link>
-          <div
-            className="px-4 py-1 bg-red-200 hover:bg-red-400 duration-200 rounded-md cursor-pointer flex items-center"
-            onClick={() => deleteBook(params.row.id)}
-          >
-            <span className="mr-4">
-              <FiTrash />
-            </span>
-            <span className="text-black font-medium">Delete</span>
-          </div>
-        </div>
-      );
+      return <ActionCols params={params} />;
     },
   },
 ];
+
+const ActionCols = ({params}) => {
+  const dispatch = useDispatch()
+  return (
+    <div className="cellAction flex flex-wrap gap-x-4">
+      <Link
+        to="/users/test"
+        style={{ textDecoration: "none" }}
+        className="group duration-200"
+      >
+        <div className="px-4 py-1 bg-white border-[1.5px] border-black rounded-md flex items-center">
+          <span className="mr-4 group-hover:scale-110 text-white">
+            <GrView />
+          </span>
+          <span className="group-hover:font-semibold">View</span>
+        </div>
+      </Link>
+      <div
+        className="px-4 py-1 bg-red-200 hover:bg-red-400 duration-200 rounded-md cursor-pointer flex items-center"
+        onClick={() => dispatch(openModal(params.row.title))}
+      >
+        <span className="mr-4">
+          <FiTrash />
+        </span>
+        <span className="text-black font-medium">Delete</span>
+      </div>
+    </div>
+  );
+};

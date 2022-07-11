@@ -2,6 +2,7 @@ import { Navigate, useRoutes } from "react-router-dom";
 import Dashboard from "pages/Dashboard";
 import DashboardLayout from "layout/DashboardLayout";
 import Book from "pages/Book";
+import NotFound from "pages/NotFound";
 
 export default function Router() {
   return useRoutes([
@@ -13,6 +14,16 @@ export default function Router() {
         { path: "book", element: <Book /> },
       ],
     },
+    {
+      path: "/",
+      // element: <DashboardLayout />,
+      children: [
+        { path: "/", element: <Navigate to="/dashboard/app" /> },
+        { path: "404", element: <NotFound /> },
+        { path: "*", element: <Navigate to="/404" /> },
+      ],
+    },
+    { path: "*", element: <Navigate to="/404" replace /> },
     // {
     //   path: '/dashboard',
     //   element: <DashboardLayout />,

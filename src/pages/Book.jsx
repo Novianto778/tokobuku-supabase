@@ -8,39 +8,59 @@ import { book_columns } from "constants/datatable";
 import { supabase } from "services/supabaseClient";
 import { useState } from "react";
 import DeleteModal from "components/DeleteModal";
+import FlashMessage from "components/FlashMessage";
 
 export default function Book() {
+  const { showDeleteModal } = useSelector((state) => state.modal);
+  const { pending } = useSelector((state) => state.book);
   const { book } = useSelector((state) => state.book);
-  const [payloadId, setPayloadId] = useState(null);
-  const [isModal, setIsModal] = useState(false);
+  const [payloadTimestamp, setPayloadTimestamp] = useState(null);
+  const [payloadEvent, setPayloadEvent] = useState("");
+  const [selectedId, setSelectedId] = useState(null);
+  const [showFlashMessage, setShowFlashMessage] = useState(false);
   const dispatch = useDispatch();
 
+  supabase
+    .from("book")
+    .on("*", (payload) => {
+      setPayloadTimestamp(payload.commit_timestamp);
+      setPayloadEvent(payload.eventType);
+    })
+    .subscribe();
   useEffect(() => {
-    supabase
-      .from("book")
-      .on("DELETE", (payload) => {
-        setPayloadId(payload.old.id);
-      })
-      .subscribe();
+    // const fetchBookCover = async () => {
+    //   const { data, error } = await supabase.storage.from("cover").list();
+    //   console.log(data)
+    // };
+    // fetchBookCover()
     dispatch(fetchBook());
-  }, [dispatch, payloadId]);
+    if (payloadTimestamp) setShowFlashMessage(true);
+    const timer = setTimeout(() => {
+      setShowFlashMessage(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [dispatch, payloadTimestamp]);
   return (
-    <div className="relative">
-      {isModal && <DeleteModal setIsModal={setIsModal} />}
-      <h1 className="text-xl font-bold mb-8">Data Buku</h1>
+    <>
+      {showDeleteModal && <DeleteModal selectedId={selectedId} />}
+      <h1 className="text-xl font-bold mb-2">Data Buku</h1>
+      {showFlashMessage && payloadEvent === "DELETE" && (
+        <FlashMessage color="red-400" message="Book deleted successfully" />
+      )}
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid
-          onSelectionModelChange={(selectionModel) =>
-            console.log(selectionModel)
-          }
+          onSelectionModelChange={(selectionModel) => {
+            setSelectedId(selectionModel[0]);
+          }}
           className="datagrid"
           rows={book}
+          loading={pending}
           columns={book_columns}
           pageSize={5}
           rowsPerPageOptions={[5]}
-          checkboxSelection
+          // checkboxSelection
         />
       </div>
-    </div>
+    </>
   );
 }

@@ -8,23 +8,25 @@ export const fetchBook = createAsyncThunk("book/fetchBook", async () => {
       name_category
     )
   `);
-  return {book, error};
+  return { book, error };
 });
 
-export const deleteBookById = createAsyncThunk("book/deleteBookById", async (id) => {
-  const { data, error } = await supabase
-  .from('book_category')
-  .delete()
-  .eq('id', id)
-  console.log(data)
-})
+export const deleteBookById = createAsyncThunk(
+  "book/deleteBookById",
+  async (id) => {
+    const { data, error } = await supabase.from("book").delete().eq("id", id);
+    return { data, error, deleting: false };
+  }
+);
 
 export const bookSlice = createSlice({
   name: "book",
   initialState: {
     book: [],
     pending: false,
-    error: null
+    error: null,
+    deletedBookTitle: "",
+    deleting: false,
   },
   extraReducers: {
     [fetchBook.pending]: (state) => {
@@ -35,6 +37,17 @@ export const bookSlice = createSlice({
     },
     [fetchBook.fulfilled]: (state, action) => {
       state.book = action.payload.book;
+      state.pending = false;
+    },
+    [deleteBookById.pending]: (state) => {
+      state.deleting = true;
+    },
+    [deleteBookById.rejected]: (state, action) => {
+      state.error = action.payload.error;
+    },
+    [deleteBookById.fulfilled]: (state, action) => {
+      state.deletedBookTitle = action.payload.data;
+      state.deleting = false;
     },
   },
 });
