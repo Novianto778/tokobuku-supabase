@@ -45,7 +45,10 @@ export default function Book() {
       {showDeleteModal && <DeleteModal selectedId={selectedId} />}
       <h1 className="text-xl font-bold mb-2">Data Buku</h1>
       {showFlashMessage && payloadEvent === "DELETE" && (
-        <FlashMessage color="red-400" message="Book deleted successfully" />
+        <FlashMessage
+          type={payloadEvent.toLowerCase()}
+          message="Book deleted successfully"
+        />
       )}
       <div style={{ height: 400, width: "100%" }}>
         <DataGrid

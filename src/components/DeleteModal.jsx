@@ -15,7 +15,7 @@ const DeleteModal = ({ selectedId }) => {
   };
   useEffect(() => {
     if (!deleting && isDelete) dispatch(hideModal());
-  }, [deleting]);
+  }, [deleting, isDelete, dispatch]);
 
   return (
     <div

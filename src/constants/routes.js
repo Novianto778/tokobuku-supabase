@@ -3,6 +3,7 @@ import Dashboard from "pages/Dashboard";
 import DashboardLayout from "layout/DashboardLayout";
 import Book from "pages/Book";
 import NotFound from "pages/NotFound";
+import Login from "pages/Login";
 
 export default function Router() {
   return useRoutes([
@@ -19,6 +20,7 @@ export default function Router() {
       // element: <DashboardLayout />,
       children: [
         { path: "/", element: <Navigate to="/dashboard/app" /> },
+        { path: "login", element: <Login /> },
         { path: "404", element: <NotFound /> },
         { path: "*", element: <Navigate to="/404" /> },
       ],
