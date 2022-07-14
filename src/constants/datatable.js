@@ -1,13 +1,9 @@
 import { Link } from "react-router-dom";
 import { GrView } from "react-icons/gr";
 import { FiTrash } from "react-icons/fi";
-import { supabase } from "services/supabaseClient";
 import { useDispatch } from "react-redux";
 import { openModal } from "store/modalSlice";
 
-const deleteBook = async (id) => {
-  const { data, error } = await supabase.from("book").delete().eq("id", id);
-};
 export const book_columns = [
   { field: "id", headerName: "ID", headerAlign: "left", width: 80 },
   { field: "title", headerName: "Title", headerAlign: "left", width: 160 },
@@ -91,3 +87,5 @@ const ActionCols = ({params}) => {
     </div>
   );
 };
+
+ActionCols.whyDidYouRender = true;

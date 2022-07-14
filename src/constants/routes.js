@@ -4,12 +4,13 @@ import DashboardLayout from "layout/DashboardLayout";
 import Book from "pages/Book";
 import NotFound from "pages/NotFound";
 import Login from "pages/Login";
+import PrivateRoutes from "components/PrivateRoutes";
 
 export default function Router() {
   return useRoutes([
     {
       path: "/dashboard",
-      element: <DashboardLayout />,
+      element: <PrivateRoutes />,
       children: [
         { path: "app", element: <Dashboard /> },
         { path: "book", element: <Book /> },
