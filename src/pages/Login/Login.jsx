@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
-import book from "../assets/img/book.png";
-import logo from "../assets/img/logo-text.svg";
+import book from "../../assets/img/book.png";
+import logo from "../../assets/img/logo-text.svg";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Input from "../components/Input";
+import Input from "../../components/form/Input";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -18,7 +18,7 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
-  const location = useLocation()
+  const location = useLocation();
   const { user, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const Login = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const redirectPath = location.state?.path || '/'
+  const redirectPath = location.state?.path || "/";
   const submitForm = async (data) => {
     try {
       await dispatch(signInUser(data));
@@ -89,7 +89,7 @@ const Login = () => {
                 placeholder="Enter your password"
                 color="yellow-400"
                 name="password"
-                errors={errors.email?.password}
+                errors={errors.password?.message}
               />
 
               <Link
@@ -104,6 +104,12 @@ const Login = () => {
               >
                 Login
               </button>
+              <p className="text-center mt-2">
+                Don't have an account?{" "}
+                <Link className="text-yellow-400 font-semibold" to="/signup">
+                  Sign Up
+                </Link>
+              </p>
             </form>
           </div>
         </div>

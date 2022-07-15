@@ -2,8 +2,8 @@ import { RiNotification3Line } from "react-icons/ri";
 import { BsChatLeft } from "react-icons/bs";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import avatar from "../assets/img/avatar.png";
-import SearchBar from "./SearchBar";
-import AccountPopover from "./AccountPopover";
+import SearchBar from "../components/form/SearchBar";
+import AccountPopover from "../components/AccountPopover";
 import { PortalWithState } from "react-portal";
 
 const Navbar = () => {

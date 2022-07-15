@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteBookById } from "store/bookSlice";
 import { hideModal } from "store/modalSlice";
-import LoadingCircle from "./LoadingCircle";
+import LoadingCircle from "../../components/ui/LoadingCircle";
 
 const DeleteModal = ({ selectedId }) => {
   const { deleting } = useSelector((state) => state.book);

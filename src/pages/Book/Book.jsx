@@ -4,9 +4,9 @@ import { fetchBook } from "store/bookSlice";
 import { book_columns } from "constants/datatable";
 import { supabase } from "services/supabaseClient";
 import { useState } from "react";
-import DeleteModal from "components/DeleteModal";
-import FlashMessage from "components/FlashMessage";
-import Datatable from "components/Datatable";
+import DeleteModal from "pages/Book/DeleteModal";
+import FlashMessage from "components/ui/FlashMessage";
+import Datatable from "components/ui/Datatable";
 
 const Book = () => {
   const { showDeleteModal } = useSelector((state) => state.modal);

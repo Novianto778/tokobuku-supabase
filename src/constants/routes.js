@@ -1,10 +1,11 @@
 import { Navigate, useRoutes } from "react-router-dom";
-import Dashboard from "pages/Dashboard";
+import Dashboard from "pages/Home/Dashboard";
 import DashboardLayout from "layout/DashboardLayout";
-import Book from "pages/Book";
+import Book from "pages/Book/Book";
 import NotFound from "pages/NotFound";
-import Login from "pages/Login";
+import Login from "pages/Login/Login";
 import PrivateRoutes from "components/PrivateRoutes";
+import SignUp from "pages/Signup/SignUp";
 
 export default function Router() {
   return useRoutes([
@@ -22,6 +23,7 @@ export default function Router() {
       children: [
         { path: "/", element: <Navigate to="/dashboard/app" /> },
         { path: "login", element: <Login /> },
+        { path: "signup", element: <SignUp /> },
         { path: "404", element: <NotFound /> },
         { path: "*", element: <Navigate to="/404" /> },
       ],

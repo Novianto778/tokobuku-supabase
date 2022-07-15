@@ -7,18 +7,18 @@ import { authStateChange } from "store/userSlice";
 
 const PrivateRoutes = () => {
   const location = useLocation()
-  const { session } = useSelector((state) => state.user);
+  const { session, user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   useEffect(() => {
     supabase.auth.onAuthStateChange((event, session) => {
-      dispatch(authStateChange(session));
+      const user = supabase.auth.user();
+      dispatch(authStateChange({session, user}));
     });
-    const user = supabase.auth.user();
-    // console.log(user?.id);
   }, [session]);
+
   return (
     <>
-      {session ? (
+      {session || user ? (
         <DashboardLayout>
           <Outlet />
         </DashboardLayout>
