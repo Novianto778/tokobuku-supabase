@@ -28,11 +28,11 @@ const Book = () => {
     .subscribe();
 
   useEffect(() => {
-    const fetchBookCover = async () => {
-      const { data, error } = await supabase.storage.from("cover").list();
-      console.log(data)
-    };
-    fetchBookCover()
+    // const fetchBookCover = async () => {
+    //   const { data, error } = await supabase.storage.from("cover").list();
+    //   console.log(data)
+    // };
+    // fetchBookCover()
     dispatch(fetchBook());
     if (payloadTimestamp) setShowFlashMessage(true);
     const timer = setTimeout(() => {

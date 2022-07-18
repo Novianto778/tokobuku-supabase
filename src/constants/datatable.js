@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { openModal } from "store/modalSlice";
 
 export const book_columns = [
-  { field: "id", headerName: "ID", headerAlign: "left", width: 80 },
+  { field: "id", headerName: "ID", headerAlign: "left", width: 80, hide: true },
   { field: "title", headerName: "Title", headerAlign: "left", width: 160 },
   { field: "author", headerName: "Author", headerAlign: "left", width: 150 },
   {
@@ -22,6 +22,9 @@ export const book_columns = [
     headerAlign: "left",
     width: 90,
     align: "left",
+    valueFormatter: (params) => {
+      return `Rp ${params.value}`;
+    }
   },
   {
     field: "stock",
