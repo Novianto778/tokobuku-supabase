@@ -10,6 +10,15 @@ export const signUpUser = createAsyncThunk("user/signUpUser", async (data) => {
   await supabase.auth.signUp(data);
 });
 
+export const getUserData = createAsyncThunk("user/getUserData", async (id) => {
+  let { data } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", id)
+    .single();
+  return data;
+});
+
 export const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -17,6 +26,7 @@ export const userSlice = createSlice({
     user: null,
     session: null,
     error: "",
+    userData: [],
   },
   reducers: {
     authStateChange: (state, action) => {
@@ -25,6 +35,9 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: {
+    [getUserData.fulfilled]: (state, action) => {
+      state.userData = action.payload;
+    },
     [signInUser.fulfilled]: (state, action) => {
       state.user = action.payload.user;
       state.loading = false;

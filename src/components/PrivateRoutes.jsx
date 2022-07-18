@@ -3,22 +3,14 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { supabase } from "services/supabaseClient";
-import { authStateChange } from "store/userSlice";
+import { authStateChange, getUserData } from "store/userSlice";
 
 const PrivateRoutes = () => {
-  const location = useLocation()
-  const { session, user } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
-      const user = supabase.auth.user();
-      dispatch(authStateChange({session, user}));
-    });
-  }, [session]);
-
+  const location = useLocation();
+  const { session } = useSelector((state) => state.user);
   return (
     <>
-      {session || user ? (
+      {session ? (
         <DashboardLayout>
           <Outlet />
         </DashboardLayout>

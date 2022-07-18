@@ -5,8 +5,11 @@ import avatar from "../assets/img/avatar.png";
 import SearchBar from "../components/form/SearchBar";
 import AccountPopover from "../components/AccountPopover";
 import { PortalWithState } from "react-portal";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const {  userData } = useSelector((state) => state.user);
+
   return (
     <>
       <nav className="flex flex-1 items-center justify-between relative px-7 py-2 border-b-2">
@@ -39,7 +42,7 @@ const Navbar = () => {
             <p>
               <span className="text-gray-400 text-sm">Hi,</span>{" "}
               <span className="text-gray-400 font-bold ml-1 text-sm">
-                Michael
+                {userData.username}
               </span>
             </p>
             <MdKeyboardArrowDown

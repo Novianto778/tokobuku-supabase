@@ -1,11 +1,12 @@
 import { Navigate, useRoutes } from "react-router-dom";
 import Dashboard from "pages/Home/Dashboard";
-import DashboardLayout from "layout/DashboardLayout";
 import Book from "pages/Book/Book";
 import NotFound from "pages/NotFound";
 import Login from "pages/Login/Login";
 import PrivateRoutes from "components/PrivateRoutes";
 import SignUp from "pages/Signup/SignUp";
+import Detail from "pages/Book/Detail";
+import AddBook from "pages/Book/AddBook";
 
 export default function Router() {
   return useRoutes([
@@ -14,7 +15,14 @@ export default function Router() {
       element: <PrivateRoutes />,
       children: [
         { path: "app", element: <Dashboard /> },
-        { path: "book", element: <Book /> },
+        {
+          path: "book",
+          children: [
+            { path: "", element: <Book /> },
+            { path: "add", element: <AddBook /> },
+            { path: "detail/:id", element: <Detail /> },
+          ],
+        },
       ],
     },
     {
@@ -28,7 +36,7 @@ export default function Router() {
         { path: "*", element: <Navigate to="/404" /> },
       ],
     },
-    { path: "*", element: <Navigate to="/404" replace /> },
+    // { path: "*", element: <Navigate to="/404" replace /> },
     // {
     //   path: '/dashboard',
     //   element: <DashboardLayout />,

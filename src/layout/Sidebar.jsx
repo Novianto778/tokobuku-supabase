@@ -3,9 +3,7 @@ import { FiChevronLeft } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import Logo from "../assets/img/logo.svg";
 import { links } from "../constants/links";
-const Sidebar = () => {
-  const localData = JSON.parse(localStorage.getItem("sidebarOpen")) || true;
-  const [open, setOpen] = useState(localData);
+const Sidebar = ({ open, setOpen }) => {
   const activeStylesClass = ({ isActive }) => {
     return {
       backgroundColor: isActive ? "white" : "transparent",
@@ -14,16 +12,11 @@ const Sidebar = () => {
     };
   };
 
-  useEffect(() => {
-    const localState = JSON.parse(localStorage.getItem("sidebarOpen"));
-    setOpen(localState);
-  }, [open]);
-
   return (
     <div
       className={`${
         open ? "w-72" : "w-20"
-      } duration-300 p-5 pt-8 h-screen bg-primary relative`}
+      } duration-300 p-5 pt-8 h-screen bg-primary fixed`}
     >
       <div
         className="absolute cursor-pointer rounded-full -right-3 top-9 w-6 h-6 border-2 border-white bg-white"

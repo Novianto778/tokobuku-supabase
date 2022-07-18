@@ -8,7 +8,6 @@ import Input from "../../components/form/Input";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { supabase } from "services/supabaseClient";
 import { useDispatch, useSelector } from "react-redux";
 import { signInUser } from "store/userSlice";
 
@@ -19,7 +18,7 @@ const schema = yup.object().shape({
 
 const Login = () => {
   const location = useLocation();
-  const { user, error } = useSelector((state) => state.user);
+  const { session, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -29,7 +28,7 @@ const Login = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
-  const redirectPath = location.state?.path || "/";
+  const redirectPath = location.state || "/";
   const submitForm = async (data) => {
     try {
       await dispatch(signInUser(data));
@@ -40,9 +39,9 @@ const Login = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if(user) navigate("/");
-  // }, []);
+  useEffect(() => {
+    if(session) navigate(redirectPath);
+  }, [session]);
 
   return (
     <div className="flex min-h-[100vh] h-full max-w-[1400px]">

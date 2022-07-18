@@ -7,6 +7,7 @@ import { useState } from "react";
 import DeleteModal from "pages/Book/DeleteModal";
 import FlashMessage from "components/ui/FlashMessage";
 import Datatable from "components/ui/Datatable";
+import { Link } from "react-router-dom";
 
 const Book = () => {
   const { showDeleteModal } = useSelector((state) => state.modal);
@@ -27,11 +28,11 @@ const Book = () => {
     .subscribe();
 
   useEffect(() => {
-    // const fetchBookCover = async () => {
-    //   const { data, error } = await supabase.storage.from("cover").list();
-    //   console.log(data)
-    // };
-    // fetchBookCover()
+    const fetchBookCover = async () => {
+      const { data, error } = await supabase.storage.from("cover").list();
+      console.log(data)
+    };
+    fetchBookCover()
     dispatch(fetchBook());
     if (payloadTimestamp) setShowFlashMessage(true);
     const timer = setTimeout(() => {
@@ -46,6 +47,12 @@ const Book = () => {
     <>
       {showDeleteModal && <DeleteModal selectedId={selectedId} />}
       <h1 className="text-xl font-bold mb-2">Data Buku</h1>
+      <Link
+        to="add"
+        className="px-6 py-1 bg-primary text-white rounded-md inline-block mb-2"
+      >
+        Add Book
+      </Link>
       {showFlashMessage && payloadEvent === "DELETE" && (
         <FlashMessage
           type={payloadEvent.toLowerCase()}

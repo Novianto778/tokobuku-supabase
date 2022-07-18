@@ -31,7 +31,7 @@ export const book_columns = [
     type: "number",
     renderCell: (params) => {
       const cekStatus = (stock) => {
-        if (stock < 10) return "bg-[#FFE1E7] text-[#D9697D]";
+        if (stock <= 10) return "bg-[#FFE1E7] text-[#D9697D]";
         if (stock > 10 && stock < 50) return "bg-yellow-100 text-yellow-600";
         if (stock > 50) return "bg-[#D0F4E8] text-[#23A17A]";
       };
@@ -59,12 +59,12 @@ export const book_columns = [
   },
 ];
 
-const ActionCols = ({params}) => {
-  const dispatch = useDispatch()
+const ActionCols = ({ params }) => {
+  const dispatch = useDispatch();
   return (
     <div className="cellAction flex flex-wrap gap-x-4">
       <Link
-        to="/users/test"
+        to={`detail/${params.row.id}`}
         style={{ textDecoration: "none" }}
         className="group duration-200"
       >
