@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { deleteImage } from "services/supabaseFunction";
 import { deleteBookById } from "store/bookSlice";
 import { hideModal } from "store/modalSlice";
 import LoadingCircle from "../../components/ui/LoadingCircle";
 
 const DeleteModal = ({ selectedId }) => {
-  const { deleting } = useSelector((state) => state.book);
+  const { book, deleting } = useSelector((state) => state.book);
   const { selectedBookTitle } = useSelector((state) => state.modal);
   const [isDelete, setIsDelete] = useState(false);
   const dispatch = useDispatch();
   const handleDeleteBook = (id) => {
     setIsDelete(true);
     dispatch(deleteBookById(id));
+    const bookCover = book.find((book) => book.id === +id).cover;
+    deleteImage('cover', bookCover)
   };
   useEffect(() => {
     if (!deleting && isDelete) dispatch(hideModal());
