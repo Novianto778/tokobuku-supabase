@@ -5,55 +5,44 @@ import Select from "components/form/Select";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBookCategory } from "store/bookSlice";
-import * as yup from "yup";
+import { fetchBook, fetchBookCategory } from "store/bookSlice";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
-import { insertTable, uploadImage } from "services/supabaseFunction";
-import { useNavigate } from "react-router-dom";
+import {
+  downloadImage,
+  insertTable,
+  updateBook,
+  uploadImage,
+} from "services/supabaseFunction";
+import { useNavigate, useParams } from "react-router-dom";
+import { bookSchema } from "constants/formSchema";
 
-const schema = yup.object().shape({
-  title: yup.string().required(),
-  release_year: yup.string().required(),
-  author: yup.string().required(),
-  price: yup.number().typeError("price is required").positive().required(),
-  discount: yup.number().min(0).max(1).nullable(true).transform((_, val) => val === Number(val) ? val : 0) ,
-  stock: yup
-    .number()
-    .typeError("stock is required")
-    .integer()
-    .positive()
-    .required(),
-  book_category_id: yup
-    .number()
-    .min(1, "Book category has not been selected")
-    .required(),
-  cover: yup
-    .mixed()
-    .test(
-      "fileSize",
-      "File too large, file must be less than 512 kb",
-      (value) => {
-        return value === null || (value && value.size <= 512000);
-      }
-    )
-    .test(
-      "fileFormat",
-      "Unsupported file type",
-      (value) =>
-        value === null ||
-        (value && ["image/jpeg", "image/jpg", "image/png"].includes(value.type))
-    ),
-});
-
-const AddBook = () => {
-  const navigate = useNavigate()
+const AddEditBook = ({ isEdit }) => {
+  const navigate = useNavigate();
+  const { book } = useSelector((state) => state.book);
+  const [bookData, setBookData] = useState(null);
   const { book_category } = useSelector((state) => state.book);
   const [imagePreview, setImagePreview] = useState("");
   const dispatch = useDispatch();
+  const params = useParams();
+
   useEffect(() => {
     dispatch(fetchBookCategory());
+    dispatch(fetchBook());
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isEdit) {
+      const bookDetail = book.find((item) => item.id === +params.id);
+      setBookData(bookDetail);
+      if (bookData?.cover)
+        downloadImage("cover", bookData.cover, setImagePreview);
+      reset(bookData);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [book]);
 
   const {
     register,
@@ -62,21 +51,36 @@ const AddBook = () => {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(bookSchema),
   });
 
   const submitForm = (data) => {
-    const file = data.cover;
-    const fileExt = file.name.split(".").pop();
-    const fileName = `${uuidv4()}.${fileExt}`;
-    uploadImage('cover', fileName, file)
+    let fileName;
+    if (data.cover instanceof File) {
+      const file = data.cover;
+      const fileExt = file.name.split(".").pop();
+      fileName = `${uuidv4()}.${fileExt}`;
+      uploadImage("cover", fileName, file);
+    } else {
+      fileName = data.cover;
+    }
     const slug = data.title.split(" ").join("-").toLowerCase();
-    const currentDate = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-    const bookData = { ...data, slug, cover: fileName, created_at: currentDate, updated_at: currentDate };
-    insertTable('book', bookData)
-    reset()
-    navigate("/dashboard/book")
-    
+    const currentDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+    const newBookData = {
+      ...data,
+      slug,
+      cover: fileName,
+      created_at: isEdit ? bookData.created_at : currentDate,
+      updated_at: currentDate,
+    };
+    delete newBookData.book_category;
+    if (isEdit) {
+      updateBook(newBookData, params.id);
+    } else {
+      insertTable("book", newBookData);
+    }
+    reset();
+    navigate("/dashboard/book");
   };
 
   const imageHandler = (e) => {
@@ -106,7 +110,6 @@ const AddBook = () => {
               {...register("cover")}
               name="cover"
               accept="image/*"
-              // onChange={imageHandler}
               onChange={(e) => {
                 imageHandler(e);
                 setValue("cover", e.target.files[0], {
@@ -121,7 +124,7 @@ const AddBook = () => {
                 type="submit"
                 className="px-6 py-2 bg-primary rounded-md text-white font-semibold w-full cursor-pointer"
               >
-                Add Book
+                {isEdit ? 'Update Book' : 'Add Book'}
               </button>
             </div>
           </div>
@@ -221,4 +224,4 @@ const AddBook = () => {
   );
 };
 
-export default AddBook;
+export default AddEditBook;

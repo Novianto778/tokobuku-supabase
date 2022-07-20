@@ -40,3 +40,15 @@ export const deleteImage = async (bucket, img) => {
     alert(error.message);
   }
 };
+
+export const updateBook = async (data, id) => {
+  try {
+    const { error } = await supabase
+      .from("book")
+      .update(data)
+      .eq('id', id);
+    if (error) throw error;
+  } catch (error) {
+    alert(error.message);
+  }
+};

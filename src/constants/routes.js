@@ -6,7 +6,7 @@ import Login from "pages/Login/Login";
 import PrivateRoutes from "components/PrivateRoutes";
 import SignUp from "pages/Signup/SignUp";
 import Detail from "pages/Book/Detail";
-import AddBook from "pages/Book/AddBook";
+import AddEditBook from "pages/Book/AddEditBook";
 
 export default function Router() {
   return useRoutes([
@@ -19,8 +19,9 @@ export default function Router() {
           path: "book",
           children: [
             { path: "", element: <Book /> },
-            { path: "add", element: <AddBook /> },
+            { path: "add", element: <AddEditBook /> },
             { path: "detail/:id", element: <Detail /> },
+            { path: "edit/:id", element: <AddEditBook isEdit /> },
           ],
         },
       ],
