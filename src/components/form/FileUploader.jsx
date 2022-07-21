@@ -1,5 +1,4 @@
 import React, { forwardRef } from "react";
-import image from "../../assets/img/avatar.png";
 
 const FileUploader = forwardRef((props, ref) => {
   const { name, image, errors } = props;

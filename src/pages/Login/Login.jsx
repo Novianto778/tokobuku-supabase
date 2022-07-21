@@ -40,7 +40,8 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if(session) navigate(redirectPath);
+    if (session) navigate(redirectPath);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   return (

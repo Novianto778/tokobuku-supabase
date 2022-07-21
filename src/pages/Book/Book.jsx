@@ -8,6 +8,9 @@ import DeleteModal from "pages/Book/DeleteModal";
 import FlashMessage from "components/ui/FlashMessage";
 import Datatable from "components/ui/Datatable";
 import { Link } from "react-router-dom";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
+import * as XLSX from "xlsx";
 
 const Book = () => {
   const { showDeleteModal } = useSelector((state) => state.modal);
@@ -26,6 +29,52 @@ const Book = () => {
       setPayloadEvent(payload.eventType);
     })
     .subscribe();
+
+  const handleExportXLSX = () => {
+    const newBookData = book.map((item) => {
+      const {
+        created_at,
+        updated_at,
+        deleted_at,
+        book_category_id,
+        book_category: {name_category},
+        slug,
+        cover,
+        ...rest
+      } = item;
+      return {...rest, name_category}
+    })
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(newBookData);
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    XLSX.writeFile(wb, "book.xlsx");
+  };
+
+  const handleExportPDF = () => {
+    const unit = "pt";
+    const size = "A4"; // Use A1, A2, A3 or A4
+    const orientation = "portrait"; // portrait or landscape
+
+    const marginLeft = 40;
+    const doc = new jsPDF(orientation, unit, size);
+
+    doc.setFontSize(15);
+
+    const title = "My Awesome Report";
+    const headers = [["TITLE", "AUTHOR"]];
+
+    const data = book.map((elt) => [elt.title, elt.author]);
+
+    let content = {
+      startY: 50,
+      head: headers,
+      body: data,
+    };
+
+    doc.text(title, marginLeft, 40);
+    doc.autoTable(content);
+    doc.save("report.pdf");
+  };
 
   useEffect(() => {
     // const fetchBookCover = async () => {
@@ -47,12 +96,26 @@ const Book = () => {
     <>
       {showDeleteModal && <DeleteModal selectedId={selectedId} />}
       <h1 className="text-xl font-bold mb-2">Data Buku</h1>
-      <Link
-        to="add"
-        className="px-6 py-1 bg-primary text-white rounded-md inline-block mb-2"
-      >
-        Add Book
-      </Link>
+      <div className="flex gap-x-8 items-center mb-2">
+        <Link
+          to="add"
+          className="px-6 py-1 bg-primary text-white rounded-md inline-block"
+        >
+          Add Book
+        </Link>
+        <button
+          onClick={handleExportPDF}
+          className="px-6 py-0.5 bg-white border-2 border-primary rounded-md hover:bg-primary hover:text-white duration-200"
+        >
+          Export PDF
+        </button>
+        <button
+          onClick={handleExportXLSX}
+          className="px-6 py-0.5 bg-white border-2 border-primary rounded-md hover:bg-primary hover:text-white duration-200"
+        >
+          Export Excel
+        </button>
+      </div>
       {showFlashMessage && payloadEvent === "DELETE" && (
         <FlashMessage
           type={payloadEvent.toLowerCase()}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { FiChevronLeft } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import Logo from "../assets/img/logo.svg";

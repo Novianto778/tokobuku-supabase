@@ -13,9 +13,10 @@ function App() {
     dispatch(authStateChange({ session: rec_session, user }));
     supabase.auth.onAuthStateChange((_event, session) => {
       dispatch(authStateChange({ session, user }));
+      // console.log(_event, session)
     });
     if (user) dispatch(getUserData(user.id));
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   return <Router />;

@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
+import React, { useState } from "react";
 import book from "../../assets/img/book.png";
 import logo from "../../assets/img/logo-text.svg";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Input from "../../components/form/Input";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { supabase } from "services/supabaseClient";
-import { useDispatch, useSelector } from "react-redux";
-import { signInUser } from "store/userSlice";
+import { useSelector } from "react-redux";
 import SignupModal from "pages/Signup/SignupModal";
 
 const schema = yup.object().shape({
@@ -26,10 +23,7 @@ const schema = yup.object().shape({
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [openModal, setOpenModal] = useState(false);
-  const location = useLocation();
-  const { user, error } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { error } = useSelector((state) => state.user);
   const {
     reset,
     register,
@@ -118,7 +112,10 @@ const SignUp = () => {
                   Sign Up
                 </button>
                 <p className="text-center mt-2">
-                  Have an account? <Link className="text-yellow-400 font-semibold" to="/login">Login</Link>
+                  Have an account?{" "}
+                  <Link className="text-yellow-400 font-semibold" to="/login">
+                    Login
+                  </Link>
                 </p>
               </form>
             </div>
