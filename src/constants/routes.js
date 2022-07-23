@@ -7,6 +7,9 @@ import PrivateRoutes from "components/PrivateRoutes";
 import SignUp from "pages/Signup/SignUp";
 import Detail from "pages/Book/Detail";
 import AddEditBook from "pages/Book/AddEditBook";
+import SalesTransaction from "pages/Sales/Transaction";
+import SalesReport from "pages/Sales/Report";
+import DashboardLayout from "layout/DashboardLayout";
 
 export default function Router() {
   return useRoutes([
@@ -35,6 +38,14 @@ export default function Router() {
         { path: "signup", element: <SignUp /> },
         { path: "404", element: <NotFound /> },
         { path: "*", element: <Navigate to="/404" /> },
+        {
+          path: "sales",
+          element: <DashboardLayout />,
+          children: [
+            { path: "transaction", element: <SalesTransaction /> },
+            { path: "report", element: <SalesReport /> },
+          ],
+        },
       ],
     },
     // { path: "*", element: <Navigate to="/404" replace /> },

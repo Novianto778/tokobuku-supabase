@@ -3,6 +3,8 @@ import { FiChevronLeft } from "react-icons/fi";
 import { NavLink } from "react-router-dom";
 import Logo from "../assets/img/logo.svg";
 import { links } from "../constants/links";
+import DropdownLink from "components/ui/DropdownLink";
+
 const Sidebar = ({ open, setOpen }) => {
   const activeStylesClass = ({ isActive }) => {
     return {
@@ -58,23 +60,61 @@ const Sidebar = ({ open, setOpen }) => {
               >
                 {link.title}
               </h4>
-              {link.links.map((item, idx) => (
-                <NavLink
-                  style={activeStylesClass}
-                  to={item.link}
-                  key={idx}
-                  className={`text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md ${
-                    !open ? "mt-4" : "mt-2"
-                  }`}
-                >
-                  <span>{item.icon}</span>
-                  <span
-                    className={`${!open && "hidden"} origin-left duration-200`}
-                  >
-                    {item.name}
-                  </span>
-                </NavLink>
-              ))}
+              {link.links.map((item, idx) => {
+                const LinkItem = () => (
+                  <>
+                    <span>{item.icon}</span>
+                    <span
+                      className={`${
+                        !open && "hidden"
+                      } origin-left duration-200 font-semibold`}
+                    >
+                      {item.name}
+                    </span>
+                  </>
+                );
+                return (
+                  <React.Fragment key={idx}>
+                    {item.subLinks ? (
+                      <DropdownLink
+                        open={open}
+                        subLinks={item.subLinks}
+                        activeStylesClass={activeStylesClass}
+                      >
+                        <LinkItem />
+                      </DropdownLink>
+                    ) : (
+                      <NavLink
+                        style={activeStylesClass}
+                        to={item.link}
+                        className={`text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md ${
+                          !open ? "mt-4" : "mt-2"
+                        }`}
+                      >
+                        <LinkItem />
+                      </NavLink>
+                    )}
+                    {/* {item.subLinks &&
+                      open &&
+                      item.subLinks.map((subLink, idx) => (
+                        <div
+                          key={idx}
+                          className={`gap-x-4 ${
+                            subNav ? "flex" : "hidden"
+                          } select-none`}
+                        >
+                          <NavLink
+                            style={activeStylesClass}
+                            to={subLink.link}
+                            className="ml-10 text-gray-400 text-sm w-full inline-block p-2 rounded-md"
+                          >
+                            {subLink.name}
+                          </NavLink>
+                        </div>
+                      ))} */}
+                  </React.Fragment>
+                );
+              })}
             </div>
           );
         })}
