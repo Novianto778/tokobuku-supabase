@@ -1,12 +1,22 @@
 import { Link } from "react-router-dom";
 import { GrView } from "react-icons/gr";
 import { FiTrash } from "react-icons/fi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "store/modalSlice";
+import { GridActionsCellItem } from "@mui/x-data-grid";
+import { AiOutlineEdit } from "react-icons/ai";
+import { deleteTransaction } from "store/salesSlice";
+import { useCallback } from "react";
 
 export const book_columns = [
   { field: "id", headerName: "ID", headerAlign: "left", width: 80, hide: true },
-  { field: "title", headerName: "Title", headerAlign: "left", width: 160 },
+  {
+    field: "title",
+    headerName: "Title",
+    headerAlign: "left",
+    minWidth: 160,
+    flex: 1,
+  },
   { field: "author", headerName: "Author", headerAlign: "left", width: 150 },
   {
     field: "release_year",
@@ -24,7 +34,7 @@ export const book_columns = [
     align: "left",
     valueFormatter: (params) => {
       return `Rp ${params.value}`;
-    }
+    },
   },
   {
     field: "stock",
@@ -53,9 +63,10 @@ export const book_columns = [
     field: "action",
     headerName: "Action",
     headerAlign: "right",
-    width: 240,
+    minWidth: 240,
     sortable: false,
     align: "right",
+    flex: 1,
     renderCell: (params) => {
       return <ActionCols params={params} />;
     },
@@ -91,4 +102,101 @@ const ActionCols = ({ params }) => {
   );
 };
 
-ActionCols.whyDidYouRender = true;
+export const transaction_columns = [
+  { field: "id", headerName: "ID", headerAlign: "left", width: 80, hide: true },
+  {
+    field: "no",
+    headerName: "No",
+    tyoe: "number",
+    headerAlign: "center",
+    width: 80,
+    align: "center",
+  },
+  {
+    field: "title",
+    headerName: "Product",
+    headerAlign: "left",
+    width: 180,
+    flex: 1,
+  },
+  {
+    field: "qty",
+    headerName: "Quantity",
+    type: "number",
+    headerAlign: "center",
+    width: 80,
+    align: "center",
+  },
+  {
+    field: "price",
+    headerName: "Unit Price",
+    type: "number",
+    headerAlign: "left",
+    minWidth: 120,
+    flex: 0.5,
+    align: "left",
+    valueFormatter: (params) => {
+      return `Rp ${params.value}`;
+    },
+  },
+  {
+    field: "discount",
+    headerName: "Discount",
+    type: "number",
+    headerAlign: "left",
+    width: 110,
+    align: "left",
+    valueGetter: (params) => {
+      return `Rp ${params.row.price * params.value * params.row.qty}`;
+    },
+  },
+  {
+    field: "subtotal",
+    headerName: "Subtotal",
+    type: "number",
+    headerAlign: "left",
+    minWidth: 120,
+    flex: 0.5,
+    align: "left",
+    valueGetter: (params) => {
+      return `Rp ${
+        (params.row.price - params.row.price * params.row.discount) *
+        params.row.qty
+      }`;
+    },
+  },
+
+  {
+    field: "action",
+    headerName: "Action",
+    headerAlign: "right",
+    minWidth: 240,
+    sortable: false,
+    align: "right",
+    flex: 1,
+    type: "actions",
+    getActions: (params) => [
+      <GridActionsCellItem
+        icon={<AiOutlineEdit className="text-lg" />}
+        onClick={() => console.log(params.row.id)}
+        label="Edit"
+      />,
+      <DeleteTransactionButton params={params} />,
+    ],
+  },
+];
+
+const DeleteTransactionButton = ({ params }) => {
+  const { transaction } = useSelector((state) => state.sales);
+  const dispatch = useDispatch();
+  const deleteRow = useCallback((id) => {
+    return [...transaction].filter((row) => row.id !== id);
+  }, [transaction]);
+  return (
+    <GridActionsCellItem
+      icon={<FiTrash className="text-lg" />}
+      onClick={() => dispatch(deleteTransaction(deleteRow(params.row.id)), console.log(deleteRow(params.row.id)))}
+      label="Delete"
+    />
+  );
+};

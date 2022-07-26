@@ -1,9 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiChevronRight } from "react-icons/bi";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 const DropdownLink = ({ open, children, subLinks, activeStylesClass }) => {
+  const [sameRoute, setSameRoute] = useState(false);
   const [subNav, setSubNav] = useState(false);
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const isSameRoute = subLinks.some((item) => item.link === pathname);
+    setSameRoute(isSameRoute);
+  }, [pathname]);
+
+  const sameRouteStyles = {
+    backgroundColor: sameRoute ? "white" : "transparent",
+    color: sameRoute ? "#18213E" : "rgb(209 213 219)",
+    fontWeight: sameRoute ? "bold" : "normal",
+  };
 
   return (
     <>
@@ -12,6 +24,7 @@ const DropdownLink = ({ open, children, subLinks, activeStylesClass }) => {
         className={`text-sm flex items-center gap-x-4 cursor-pointer p-2 hover:bg-gray-600 rounded-md ${
           !open ? "mt-4" : "mt-2"
         } text-gray-300 mb-4`}
+        style={sameRouteStyles}
       >
         {children}
         {open && (
