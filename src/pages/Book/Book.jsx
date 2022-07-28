@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { memo, useEffect } from "react";
 import { fetchBook } from "store/bookSlice";
-import { book_columns } from "constants/datatable";
+import { book_columns } from "constants/datatable/book";
 import { supabase } from "services/supabaseClient";
 import { useState } from "react";
 import DeleteModal from "pages/Book/DeleteModal";

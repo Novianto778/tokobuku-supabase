@@ -18,10 +18,10 @@ const Sidebar = ({ open, setOpen }) => {
     <div
       className={`${
         open ? "w-72" : "w-20"
-      } duration-300 p-5 pt-8 h-screen bg-primary fixed`}
+      } duration-300 p-5 pt-8 h-screen bg-primary fixed z-50`}
     >
       <div
-        className="absolute cursor-pointer rounded-full -right-3 top-9 w-6 h-6 border-2 border-white bg-white"
+        className="absolute cursor-pointer rounded-full -right-3 top-9 w-6 h-6 border-2 z-50 border-white bg-white"
         onClick={() => {
           setOpen(!open);
           localStorage.setItem("sidebarOpen", !open);
