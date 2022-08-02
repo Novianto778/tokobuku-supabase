@@ -79,6 +79,7 @@ const AddEditBook = ({ isEdit }) => {
     } else {
       insertTable("book", newBookData);
     }
+    console.log(newBookData)
     reset();
     navigate("/dashboard/book");
   };

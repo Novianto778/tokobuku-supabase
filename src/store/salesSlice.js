@@ -10,11 +10,23 @@ export const salesSlice = createSlice({
     selectedCustomer: null,
   },
   reducers: {
+    resetCustomer: (state) => {
+      state.selectedCustomer = null;
+    },
+    resetTransaction: (state) => {
+      state.transaction = [];
+    },
     deleteTransaction: (state, action) => {
       state.transaction = action.payload;
     },
     setSelectedCustomer: (state, action) => {
       state.selectedCustomer = action.payload;
+    },
+    updateQtyProduct: (state, { payload }) => {
+      const selectedItemIndex = state.transaction.findIndex(
+        (item) => item.id === payload.id
+      );
+      state.transaction[selectedItemIndex].qty = payload.qty;
     },
     addTransaction: (state, { payload }) => {
       const existItem = [...state.transaction].find(
@@ -44,7 +56,13 @@ export const salesSlice = createSlice({
   extraReducers: {},
 });
 
-export const { deleteTransaction, setSelectedCustomer, addTransaction } =
-  salesSlice.actions;
+export const {
+  deleteTransaction,
+  setSelectedCustomer,
+  addTransaction,
+  updateQtyProduct,
+  resetTransaction,
+  resetCustomer
+} = salesSlice.actions;
 
 export default salesSlice.reducer;

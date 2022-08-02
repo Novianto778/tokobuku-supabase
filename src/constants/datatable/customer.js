@@ -57,7 +57,7 @@ const SelectCustomerButton = ({ params }) => {
   const dispatch = useDispatch();
   const selectCustomer = useCallback(
     (id) => {
-      return [...customer].find((row) => row.id !== id);
+      return [...customer].find((row) => +row.id === +id);
     },
     [customer]
   );

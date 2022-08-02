@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { supabase } from "services/supabaseClient";
 
-export const fetchCustomer = createAsyncThunk("customer/fetchCustomer", async () => {
-  let { data: customer, error } = await supabase
-  .from('customer')
-  .select('*')
-  return { customer, error };
-});
+export const fetchCustomer = createAsyncThunk(
+  "customer/fetchCustomer",
+  async () => {
+    let { data: customer, error } = await supabase.from("customer").select("*");
+    return { customer, error };
+  }
+);
 
 export const customerSlice = createSlice({
   name: "customer",

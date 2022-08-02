@@ -9,8 +9,8 @@ export const bookSchema = yup.object().shape({
     .number()
     .min(0)
     .max(1)
-    .nullable(true)
-    .transform((_, val) => (val === Number(val) ? val : 0)),
+    .transform((value) => (isNaN(value) ? 0 : value))
+    .nullable(),
   stock: yup
     .number()
     .typeError("stock is required")

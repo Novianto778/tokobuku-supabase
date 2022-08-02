@@ -1,8 +1,9 @@
 import { supabase } from "services/supabaseClient";
 
 export const insertTable = async (table, data) => {
+  const payload = data.length ? data : [data];
   try {
-    const { error } = await supabase.from(table).insert([data]);
+    const { error } = await supabase.from(table).insert(payload);
 
     if (error) throw error;
   } catch (error) {

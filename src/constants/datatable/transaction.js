@@ -1,12 +1,9 @@
-
 import { FiTrash } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { GridActionsCellItem } from "@mui/x-data-grid";
 import { AiOutlineEdit } from "react-icons/ai";
-import { deleteTransaction } from "store/salesSlice";
-import { useCallback } from "react";
-
-
+import { deleteTransaction, updateQtyProduct } from "store/salesSlice";
+import { useCallback, useEffect } from "react";
 
 export const transaction_columns = [
   { field: "id", headerName: "ID", headerAlign: "left", width: 80, hide: true },
@@ -32,6 +29,10 @@ export const transaction_columns = [
     headerAlign: "center",
     width: 80,
     align: "center",
+    editable: true,
+    renderCell: (params) => {
+      return <QtyCell params={params} />;
+    },
   },
   {
     field: "price",
@@ -53,6 +54,7 @@ export const transaction_columns = [
     width: 110,
     align: "left",
     valueGetter: (params) => {
+      // console.log(params)
       return `Rp ${params.row.price * params.value * params.row.qty}`;
     },
   },
@@ -95,9 +97,12 @@ export const transaction_columns = [
 const DeleteTransactionButton = ({ params }) => {
   const { transaction } = useSelector((state) => state.sales);
   const dispatch = useDispatch();
-  const deleteRow = useCallback((id) => {
-    return [...transaction].filter((row) => row.id !== id);
-  }, [transaction]);
+  const deleteRow = useCallback(
+    (id) => {
+      return [...transaction].filter((row) => row.id !== id);
+    },
+    [transaction]
+  );
   return (
     <GridActionsCellItem
       icon={<FiTrash className="text-lg" />}
@@ -105,4 +110,12 @@ const DeleteTransactionButton = ({ params }) => {
       label="Delete"
     />
   );
+};
+
+const QtyCell = ({ params }) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(updateQtyProduct({ id: params.row.id, qty: params.value }));
+  }, [params.value]);
+  return <span>{params.value}</span>;
 };
